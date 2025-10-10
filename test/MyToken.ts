@@ -27,12 +27,13 @@ describe("mytoken deploy", () => {
   it("should return decimals", async () => {
     expect(await myTokenC.decimals()).equal(18);
   });
-  it("should retrun 0 totalSupply", async () => {
-    expect(await myTokenC.totalSupply()).equal(0);
+
+  it("should retrun 1MT totalSupply", async () => {
+    expect(await myTokenC.totalSupply()).equal(1n * 10n ** 18n);
   });
-  it("should retrun 0 balance for signer 0", async () => {
-    expect(await myTokenC.balanceOf(signers[0].address)).equal(0);
-    const signer0 = signers[0];
-    expect(await myTokenC.balanceOf(signer0)).equal(0);
+
+  // 1MT = 1*(10^18) = 1n*10n**18n = BigInt(1*10**18)
+  it("should retrun 1MT balance for signer 0", async () => {
+    expect(await myTokenC.balanceOf(signers[0].address)).equal(1n * 10n ** 18n);
   });
 });

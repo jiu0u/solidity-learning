@@ -17,9 +17,15 @@ contract MyToken {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
+        _mint(1*10**uint256(decimals), msg.sender); // 1MT
+        //uint256이 기본 (32바이트) <- decimals는 uint8타입 (변경필요)
     }
 
-    // external : 외부 호출만 가능하다 (public이랑 좀 다름)
-    // returns : 리턴 '타입' 지정. 여러 개 반환 가능해서 -s가 붙음 (<-> return)
-   
+    //블록체인에서는 토큰을 발행할 때 minting, mint라는 단어를 사용함.
+    function _mint(uint256 amount, address owner) internal {
+        totalSupply += amount;
+        balanceOf[owner] += amount; 
+        // 가진 사람이 없으면 증발되니까..
+    }
+ 
 }
