@@ -13,19 +13,23 @@ contract MyToken {
     mapping(address => uint256) public balanceOf;
     // (key => value)
 
-    constructor(string memory _name, string memory _symbol, uint8 _decimals) {
+    constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _amount) {
         name = _name;
         symbol = _symbol;
         decimals = _decimals;
-        _mint(1*10**uint256(decimals), msg.sender); // 1MT
-        //uint256이 기본 (32바이트) <- decimals는 uint8타입 (변경필요)
+        _mint(_amount *10**uint256(decimals), msg.sender); // amount만큼 MT 발행
     }
 
-    //블록체인에서는 토큰을 발행할 때 minting, mint라는 단어를 사용함.
     function _mint(uint256 amount, address owner) internal {
         totalSupply += amount;
         balanceOf[owner] += amount; 
-        // 가진 사람이 없으면 증발되니까..
+    }
+
+    function transfer(uint256 amount, address to) external {
+        require(balanceOf[msg.sender] >= amount, "insufficient balance");
+
+        balanceOf[msg.sender] -= amount; 
+        balanceOf[to] += amount; 
     }
  
 }
