@@ -14,7 +14,7 @@ contract MyToken {
 
     //누가 얼마나 가지고 있는지
     mapping(address => uint256) public balanceOf;
-    mapping(address => mapping(address => uint256)) allowance;
+    mapping(address => mapping(address => uint256)) public allowance;
 
 
     constructor(string memory _name, string memory _symbol, uint8 _decimals, uint256 _amount) {
