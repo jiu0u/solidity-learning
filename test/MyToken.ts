@@ -5,8 +5,8 @@ import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { parseUnits } from "ethers";
 // hardhat에서 컴파일 할 때 필요한 타입 정의 파일을 여기에 보관함
 
-const mintingAmount = 100n;
-const decimals = 18n;
+const MINTING_AMOUNT = 100n;
+const DECIMALS = 18n;
 
 describe("My Token", () => {
   let myTokenC: MyToken;
@@ -18,8 +18,8 @@ describe("My Token", () => {
     myTokenC = await hre.ethers.deployContract("MyToken", [
       "MyToken",
       "MT",
-      decimals,
-      mintingAmount, //100MT 발행
+      DECIMALS,
+      MINTING_AMOUNT, //100MT 발행
     ]);
   });
 
@@ -30,13 +30,13 @@ describe("My Token", () => {
     it("should return symbol", async () => {
       expect(await myTokenC.symbol()).equal("MT");
     });
-    it("should return decimals", async () => {
-      expect(await myTokenC.decimals()).equal(decimals);
+    it("should return DECIMALS", async () => {
+      expect(await myTokenC.decimals()).equal(DECIMALS);
     });
 
     it("should retrun 100 totalSupply", async () => {
       expect(await myTokenC.totalSupply()).equal(
-        mintingAmount * 10n ** decimals,
+        MINTING_AMOUNT * 10n ** DECIMALS,
       );
     });
   });
@@ -45,7 +45,7 @@ describe("My Token", () => {
     // 1MT = 1*(10^18) = 1n*10n**18n = BigInt(1*10**18)
     it("should retrun 1MT balance for signer 0", async () => {
       expect(await myTokenC.balanceOf(signers[0].address)).equal(
-        mintingAmount * 10n ** decimals,
+        MINTING_AMOUNT * 10n ** DECIMALS,
       );
     });
   });
@@ -56,7 +56,7 @@ describe("My Token", () => {
       const signer1 = signers[1];
       await expect(
         myTokenC.transfer(
-          hre.ethers.parseUnits("0.5", decimals),
+          hre.ethers.parseUnits("0.5", DECIMALS),
           signer1.address,
         ),
       )
@@ -64,17 +64,17 @@ describe("My Token", () => {
         .withArgs(
           signer0.address,
           signer1.address,
-          hre.ethers.parseUnits("0.5", decimals),
+          hre.ethers.parseUnits("0.5", DECIMALS),
         );
       expect(await myTokenC.balanceOf(signer1.address)).equal(
-        hre.ethers.parseUnits("0.5", decimals),
+        hre.ethers.parseUnits("0.5", DECIMALS),
       );
     });
     it("should be reverted with insufficient balance error", async () => {
       const signer1 = signers[1];
       await expect(
         myTokenC.transfer(
-          hre.ethers.parseUnits((mintingAmount + 1n).toString(), decimals),
+          hre.ethers.parseUnits((MINTING_AMOUNT + 1n).toString(), DECIMALS),
           signer1.address,
         ),
       ).to.be.revertedWith("insufficient balance");
@@ -85,10 +85,10 @@ describe("My Token", () => {
     it("should emit Approval event", async () => {
       const signer1 = signers[1];
       await expect(
-        myTokenC.approve(signer1, hre.ethers.parseUnits("10", decimals)),
+        myTokenC.approve(signer1, hre.ethers.parseUnits("10", DECIMALS)),
       )
         .to.emit(myTokenC, "Approval")
-        .withArgs(signer1.address, hre.ethers.parseUnits("10", decimals));
+        .withArgs(signer1.address, hre.ethers.parseUnits("10", DECIMALS));
     });
     it("should be reverted with insufficient allowance error", async () => {
       const signer0 = signers[0];
@@ -99,7 +99,7 @@ describe("My Token", () => {
           .transferFrom(
             signer0.address,
             signer1.address,
-            hre.ethers.parseUnits("1", decimals),
+            hre.ethers.parseUnits("1", DECIMALS),
           ),
       ).to.be.revertedWith("insufficient allowance");
     });
@@ -111,10 +111,10 @@ describe("My Token", () => {
 
       //approve
       await expect(
-        myTokenC.approve(signer1, hre.ethers.parseUnits("10", decimals)),
+        myTokenC.approve(signer1, hre.ethers.parseUnits("10", DECIMALS)),
       )
         .to.emit(myTokenC, "Approval")
-        .withArgs(signer1.address, hre.ethers.parseUnits("10", decimals));
+        .withArgs(signer1.address, hre.ethers.parseUnits("10", DECIMALS));
 
       //transferFrom
       await expect(
@@ -123,18 +123,18 @@ describe("My Token", () => {
           .transferFrom(
             signer0.address,
             signer1.address,
-            hre.ethers.parseUnits("5", decimals),
+            hre.ethers.parseUnits("5", DECIMALS),
           ),
       )
         .to.emit(myTokenC, "Transfer")
         .withArgs(
           signer0.address,
           signer1.address,
-          hre.ethers.parseUnits("5", decimals),
+          hre.ethers.parseUnits("5", DECIMALS),
         );
 
       expect(await myTokenC.balanceOf(signer1.address)).equal(
-        hre.ethers.parseUnits("5", decimals),
+        hre.ethers.parseUnits("5", DECIMALS),
       );
     });
   });
