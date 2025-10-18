@@ -3,10 +3,8 @@ import { expect } from "chai";
 import { MyToken } from "../typechain-types";
 import { HardhatEthersSigner } from "@nomicfoundation/hardhat-ethers/signers";
 import { parseUnits } from "ethers";
+import { DECIMALS, MINTING_AMOUNT } from "./constant";
 // hardhat에서 컴파일 할 때 필요한 타입 정의 파일을 여기에 보관함
-
-const MINTING_AMOUNT = 100n;
-const DECIMALS = 18n;
 
 describe("My Token", () => {
   let myTokenC: MyToken;
