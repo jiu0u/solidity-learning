@@ -32,6 +32,10 @@ contract MyToken {
         emit Transfer(address(0), owner, amount);
     }
 
+    function mint(uint256 amount, address owner) external {
+        _mint(amount, owner);
+    } //modifier 배우고 수정 예정 (현재 매우 위험한 코드)
+
 
     function transfer(uint256 amount, address to) external {
         require(balanceOf[msg.sender] >= amount, "insufficient balance");
