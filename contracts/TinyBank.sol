@@ -50,10 +50,12 @@ contract TinyBank {
 
 
     function updateReward(address to) internal {
+        if (staked[to] > 0) {
         uint256 blocks = block.number - lastClaimedBlock[to];
         uint256 reward = (blocks * rewardPerBlock * staked[to]) / totalStaked ;
         stakingToken.mint(reward, to);
+        }
         lastClaimedBlock[to] = block.number;
-    } //공평한 분배는 아님. 하지만 다루지 않음.
+    }
 
 }
