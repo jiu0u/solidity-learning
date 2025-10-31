@@ -29,9 +29,8 @@ contract TinyBank {
     }
 
 
-    function stake(uint256 _amount) external {
+    function stake(uint256 _amount) external updateReward(msg.sender) {
         require(_amount >= 0, "cannot stake 0 amount");
-        updateReward(msg.sender);
         stakingToken.transferFrom(msg.sender, address(this), _amount);
         staked[msg.sender] += _amount;
         totalStaked += _amount;
@@ -39,23 +38,22 @@ contract TinyBank {
     }
 
 
-    function withdraw(uint256 _amount) external {
+    function withdraw(uint256 _amount) external updateReward(msg.sender) {
         require(staked[msg.sender] >= _amount, "insufficient staked token" );
-        updateReward(msg.sender);
         stakingToken.transfer(_amount, msg.sender);
         staked[msg.sender] -= _amount;
         totalStaked -= _amount;
         emit Withdraw(_amount, msg.sender);
     }
 
-
-    function updateReward(address to) internal {
+    modifier updateReward(address to) {
         if (staked[to] > 0) {
         uint256 blocks = block.number - lastClaimedBlock[to];
         uint256 reward = (blocks * rewardPerBlock * staked[to]) / totalStaked ;
         stakingToken.mint(reward, to);
         }
         lastClaimedBlock[to] = block.number;
+        _; //호출한 함수의 코드가 들어가는 위치 지정
     }
 
 }
