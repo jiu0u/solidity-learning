@@ -17,10 +17,10 @@ describe("TinyBank", () => {
       DECIMALS,
       MINTING_AMOUNT, //100MT 발행했었다
     ]);
-
     tinyBankC = await hre.ethers.deployContract("TinyBank", [
       await myTokenC.getAddress(),
     ]);
+    await myTokenC.setManager(tinyBankC.getAddress());
   });
 
   describe("Initialized state check", () => {
