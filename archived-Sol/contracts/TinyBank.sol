@@ -13,8 +13,8 @@ interface IMyToken {
 
 
 contract TinyBank is MultiManagedAccess {
-    event Staked(address, uint256);
-    event Withdraw(uint256 amount, address to);
+    event Staked(address indexed from, uint256 amount); //왜 이름은 사라진거지..?
+    event Withdraw(uint256 amount, address indexed to); //나 여기 왜 indexed 없지
 
     IMyToken public stakingToken; 
 
