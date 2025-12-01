@@ -65,4 +65,13 @@ contract TinyBank is ManagedAccess {
         _; //호출한 함수의 코드가 들어가는 위치 지정
     }
 
+    function currentReward(address to) external view returns (uint256) {
+        if (staked[to] > 0) {
+        uint256 blocks = block.number - lastClaimedBlock[to];
+        return (blocks * rewardPerBlock * staked[to]) / totalStaked;
+        } else {
+            return 0;
+        }
+    }
+
 }
